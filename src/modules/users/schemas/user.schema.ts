@@ -73,6 +73,30 @@ export class UserPreferences {
 
 const UserPreferencesSchema = SchemaFactory.createForClass(UserPreferences);
 
+@Schema({ _id: false })
+export class UserPresence {
+  @Prop({
+    type: String,
+    enum: ['online', 'offline', 'away', 'busy'],
+    default: 'offline',
+  })
+  status: 'online' | 'offline' | 'away' | 'busy';
+
+  @Prop()
+  lastSeen?: Date;
+
+  @Prop()
+  lastHeartbeat?: Date;
+
+  @Prop({ default: 0 })
+  activeConnections: number;
+
+  @Prop()
+  customStatus?: string;
+}
+
+const UserPresenceSchema = SchemaFactory.createForClass(UserPresence);
+
 @Schema({ timestamps: true })
 export class User {
   @Prop({ type: Types.ObjectId, ref: 'Tenant', required: true, index: true })
@@ -119,6 +143,9 @@ export class User {
 
   @Prop({ type: UserPreferencesSchema, default: {} })
   preferences: UserPreferences;
+
+  @Prop({ type: UserPresenceSchema, default: {} })
+  presence: UserPresence;
 
   @Prop({ type: Map, of: String }) // Simplified metadata map
   metadata?: Map<string, any>;

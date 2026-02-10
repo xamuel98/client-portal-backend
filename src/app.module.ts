@@ -32,6 +32,7 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { ActivityLoggingInterceptor } from './common/interceptors/activity-logging.interceptor';
 import { StatusLoggerListener } from './common/listeners/status-logger.listener';
+import { PresenceModule } from './modules/presence/presence.module';
 
 @Module({
   imports: [
@@ -99,6 +100,7 @@ import { StatusLoggerListener } from './common/listeners/status-logger.listener'
     ApprovalFlowModule,
     IntegrationsModule,
     WebhooksModule,
+    PresenceModule,
   ],
   controllers: [AppController],
   providers: [

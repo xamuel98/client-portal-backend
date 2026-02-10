@@ -15,6 +15,9 @@ import {
   CreateMemberInvitationDto,
   CreateClientInvitationDto,
   AcceptInvitationDto,
+  BulkMemberInvitationDto,
+  CreateShareableLinkDto,
+  AcceptShareableLinkDto,
 } from './dto/invitation.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -98,6 +101,69 @@ export class InvitationsController {
     @Request() req: RequestWithUser,
   ) {
     return this.invitationsService.revokeInvitation(
+      id,
+      req.user.tenantId.toString(),
+    );
+  }
+
+  @Post('member/bulk')
+  @ApiOperation({ summary: 'Bulk invite team members' })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.OWNER, UserRole.ADMIN)
+  async bulkInviteMembers(
+    @Body() dto: BulkMemberInvitationDto,
+    @Request() req: RequestWithUser,
+  ) {
+    return this.invitationsService.bulkInviteMembers(
+      dto,
+      req.user.tenantId.toString(),
+      req.user._id.toString(),
+      `${req.user.profile.firstName} ${req.user.profile.lastName}`,
+      req.tenant?.name || this.appName,
+    );
+  }
+
+  @Post('shareable-link')
+  @ApiOperation({ summary: 'Create a shareable invite link' })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.OWNER, UserRole.ADMIN)
+  async createShareableLink(
+    @Body() dto: CreateShareableLinkDto,
+    @Request() req: RequestWithUser,
+  ) {
+    return this.invitationsService.createShareableLink(
+      dto,
+      req.user.tenantId.toString(),
+      req.user._id.toString(),
+    );
+  }
+
+  @Get('shareable-links')
+  @ApiOperation({ summary: 'List all shareable links for the tenant' })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.OWNER, UserRole.ADMIN)
+  async listShareableLinks(@Request() req: RequestWithUser) {
+    return this.invitationsService.listShareableLinks(
+      req.user.tenantId.toString(),
+    );
+  }
+
+  @Post('shareable-link/accept')
+  @ApiOperation({ summary: 'Accept a shareable link invitation' })
+  @HttpCode(HttpStatus.OK)
+  async acceptShareableLink(@Body() dto: AcceptShareableLinkDto) {
+    return this.invitationsService.acceptShareableLink(dto);
+  }
+
+  @Delete('shareable-link/:id')
+  @ApiOperation({ summary: 'Deactivate a shareable link' })
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.OWNER, UserRole.ADMIN)
+  async deactivateShareableLink(
+    @Param('id') id: string,
+    @Request() req: RequestWithUser,
+  ) {
+    return this.invitationsService.deactivateShareableLink(
       id,
       req.user.tenantId.toString(),
     );

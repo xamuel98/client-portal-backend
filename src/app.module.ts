@@ -49,6 +49,7 @@ import { StatusLoggerListener } from './common/listeners/status-logger.listener'
           host: configService.get<string>('bullmq.host'),
           port: configService.get<number>('bullmq.port'),
           password: configService.get<string>('bullmq.password'),
+          family: 4,
         },
       }),
     }),

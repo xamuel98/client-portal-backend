@@ -13,6 +13,7 @@ import { Redis } from 'ioredis';
           host: configService.get<string>('redis.host'),
           port: configService.get<number>('redis.port'),
           password: configService.get<string>('redis.password'),
+          family: 4,
         });
       },
       inject: [ConfigService],

@@ -9,7 +9,8 @@ export const validationSchema = Joi.object({
   // Database
   MONGODB_URI: Joi.string().required(),
 
-  // Redis
+  // Redis (Standard)
+  REDIS_URL: Joi.string().optional(),
   REDIS_HOST: Joi.string().default('localhost'),
   REDIS_PORT: Joi.number().default(6379),
   REDIS_PASSWORD: Joi.string().allow('').optional(),

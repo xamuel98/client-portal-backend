@@ -44,14 +44,29 @@ import { StatusLoggerListener } from './common/listeners/status-logger.listener'
     RedisModule,
     BullModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        connection: {
-          host: configService.get<string>('bullmq.host'),
-          port: configService.get<number>('bullmq.port'),
-          password: configService.get<string>('bullmq.password'),
-          family: 4,
-        },
-      }),
+      useFactory: (configService: ConfigService) => {
+        const uri = configService.get<string>('redis.uri');
+        if (uri) {
+          const url = new URL(uri);
+          return {
+            connection: {
+              host: url.hostname,
+              port: Number(url.port),
+              password: url.password,
+              username: url.username,
+              family: 4,
+            },
+          };
+        }
+        return {
+          connection: {
+            host: configService.get<string>('bullmq.host'),
+            port: configService.get<number>('bullmq.port'),
+            password: configService.get<string>('bullmq.password'),
+            family: 4,
+          },
+        };
+      },
     }),
     EventEmitterModule.forRoot(),
     ThrottlerModule.forRoot([

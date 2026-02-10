@@ -9,6 +9,10 @@ import { Redis } from 'ioredis';
     {
       provide: 'REDIS_CLIENT',
       useFactory: async (configService: ConfigService) => {
+        const uri = configService.get<string>('redis.uri');
+        if (uri) {
+          return new Redis(uri, { family: 4 });
+        }
         return new Redis({
           host: configService.get<string>('redis.host'),
           port: configService.get<number>('redis.port'),

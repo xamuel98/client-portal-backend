@@ -11,9 +11,8 @@ export class GmailProvider implements EmailProvider {
   constructor(private readonly configService: ConfigService) {
     this.transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
-      port: 587,
-      secure: false,
-      service: 'gmail',
+      port: 465,
+      secure: true, // Use SSL
       family: 4, // Force IPv4
       auth: {
         user: this.configService.get<string>('email.gmail.user'),

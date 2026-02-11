@@ -27,7 +27,7 @@ export default () => ({
     webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
   },
   email: {
-    driver: process.env.EMAIL_DRIVER || 'gmail',
+    driver: process.env.EMAIL_DRIVER || 'resend',
     resendApiKey: process.env.RESEND_API_KEY,
     gmail: {
       user: process.env.GMAIL_USER,

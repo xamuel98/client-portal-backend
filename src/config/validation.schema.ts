@@ -26,7 +26,7 @@ export const validationSchema = Joi.object({
   STRIPE_WEBHOOK_SECRET: Joi.string().required(),
 
   // Email - Resend
-  EMAIL_DRIVER: Joi.string().valid('gmail', 'resend').default('gmail'),
+  EMAIL_DRIVER: Joi.string().valid('gmail', 'resend').default('resend'),
   GMAIL_USER: Joi.string().optional(),
   GMAIL_PASSWORD: Joi.string().optional(),
   RESEND_API_KEY: Joi.string().required(),
